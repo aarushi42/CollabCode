@@ -1,0 +1,23 @@
+{
+  "name": "dev_tinder",
+  "version": "1.0.0",
+  "description": "this is DevTinder",
+  "keywords": [
+    "node",
+    "mongo",
+    "express",
+    "react"
+  ],
+  "license": "ISC",
+  "author": "Aarushi Koirala",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
