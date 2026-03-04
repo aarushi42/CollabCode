@@ -1,7 +1,14 @@
 const express = require("express");
 const app = express();
-const { userAuth } = require("./middleware/auth");
+const connectDB = require("./config/database");
 
-app.listen(7777, () => {
-  console.log("listening to port number 7777");
-});
+connectDB()
+  .then(() => {
+    console.log("connected successfully");
+    app.listen(7777, () => {
+      console.log("listening to port number 7777");
+    });
+  })
+  .catch((err) => {
+    console.log("can't connect");
+  });
