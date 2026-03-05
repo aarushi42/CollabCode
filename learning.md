@@ -65,3 +65,33 @@ if (err) {
 res.status(500).send("an error occured");
 }
 });
+
+//finding by email and updating
+app.patch("/user", async (req, res) => {
+const emailId = req.body.emailId;
+const data = req.body;
+try {
+const user = await User.findOneAndUpdate({ emailId: emailId }, data, {
+returnDocument: "after",
+});
+res.send("user updated successfully");
+} catch (err) {
+res.status(500).send("error occured again");
+}
+});
+
+//getting a user on the basis of condition
+app.get("/user", async (req, res) => {
+const userEmail = req.body.emailId;
+
+try {
+const users = await User.find({ emailId: userEmail });
+if (users.length === 0) {
+res.status(404).send("User not Found");
+} else {
+res.send(users);
+}
+} catch (err) {
+res.status(500).send("error occured" + err);
+}
+});
