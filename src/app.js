@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utilis/validate");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
@@ -16,14 +18,22 @@ app.get("/feed", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  //creating a new instance of User model
-  const data = req.body;
-  const user = new User(data);
-
   try {
-    if (data?.skills.length > 10) {
-      throw new Error("Only 10 skills can be added");
-    }
+    //validating the data
+    validateSignUpData(req);
+
+    const { firstName, lastName, emailId, password } = req.body;
+
+    //hashing the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    //creating a new instance of User model
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: hashedPassword,
+    });
 
     await user.save();
     res.send("User added Successfully");
