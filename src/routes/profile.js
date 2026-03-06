@@ -1,5 +1,6 @@
 const express = require("express");
 const profileRouter = express.Router();
+const validator = require("validator");
 
 const { userAuth } = require("../middleware/auth");
 const { validateEditProfileRequest } = require("../utilis/validate");
@@ -46,6 +47,12 @@ profileRouter.patch("/profile/edit/password", userAuth, async (req, res) => {
     if (!isCurrentPasswordCorrect) {
       throw new Error("The password entered is incorrect");
     }
+
+    const isNewPasswordStrong = validator.isStrongPassword(newPassword);
+    if (!isNewPasswordStrong) {
+      throw new Error("Enter a strong password");
+    }
+
     const newPasswordHashed = await bcrypt.hash(newPassword, 10);
     loggedInUser.password = newPasswordHashed;
 
