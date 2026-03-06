@@ -95,3 +95,54 @@ res.send(users);
 res.status(500).send("error occured" + err);
 }
 });
+
+//get all the user
+app.get("/feed", async (req, res) => {
+try {
+const users = await User.find({});
+res.send(users);
+} catch (err) {
+res.status(500).send("error occured again");
+}
+});
+
+app.patch("/user/:userId", async (req, res) => {
+const userId = req.params?.userId;
+const data = req.body;
+try {
+const ALLOWED_UPDATES = [
+"password",
+"age",
+"skills",
+"about",
+"gender",
+"photoUrl",
+];
+const isUpdateAllowed = Object.keys(data).every((k) =>
+ALLOWED_UPDATES.includes(k),
+);
+if (!isUpdateAllowed) {
+throw new Error("Update Not Allowed");
+}
+if (data?.skills.length > 10) {
+throw new Error("Only 10 skills can be added");
+}
+const user = await User.findByIdAndUpdate({ \_id: userId }, data, {
+returnDocument: "after",
+runValidators: true,
+});
+res.send("user updated successfully");
+} catch (err) {
+res.status(500).send("ERROR - " + err.message);
+}
+});
+
+app.delete("/user", async (req, res) => {
+const userId = req.body.userId;
+try {
+const user = await User.findByIdAndDelete(userId);
+res.send("user deleted successfully");
+} catch (err) {
+res.status(500).send("error occured again");
+}
+});

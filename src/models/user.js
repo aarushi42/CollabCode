@@ -67,14 +67,13 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
+      maxLength: 10,
     },
   },
   {
     timestamps: true,
   },
 );
-
-const User = mongoose.model("User", userSchema);
 
 userSchema.methods.getJWT = async function () {
   const user = this;
@@ -94,5 +93,7 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
   );
   return isPasswordValid;
 };
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
