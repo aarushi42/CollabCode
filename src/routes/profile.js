@@ -6,6 +6,7 @@ const { userAuth } = require("../middleware/auth");
 const { validateEditProfileRequest } = require("../utilis/validate");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const { isObjectIdOrHexString } = require("mongoose");
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
@@ -21,6 +22,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     if (!validateEditProfileRequest(req)) {
       throw new Error("Invalid update Request");
     }
+
     const loggedInUser = req.user;
     Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
 
@@ -37,6 +39,15 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/edit/password", userAuth, async (req, res) => {
   try {
+    const ALLOWED_FIELDS = ["currentPassword", "newPassword"];
+
+    const areFieldsValid = Object.keys(req.body).every((k) =>
+      ALLOWED_FIELDS.includes(k),
+    );
+    if (!areFieldsValid) {
+      return res.send("Invalid Request");
+    }
+
     //check password
     const { currentPassword, newPassword } = req.body;
     const loggedInUser = req.user;

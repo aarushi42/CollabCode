@@ -59,4 +59,41 @@ requestRouter.post(
   },
 );
 
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    //:status should be accepted or rejected
+    //req status should be explicitly intereseted  to accept or rehect
+    //loggenin user should be the to user
+    try {
+      const loggedInUser = req.user;
+      const { status, requestId } = req.params;
+
+      const ALLOWED_STATUS = ["accepted", "rejected"];
+      const isStatusAllowed = ALLOWED_STATUS.includes(status);
+      if (!isStatusAllowed) {
+        return res.status(400).json({ message: "Bad Request" });
+      }
+
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+
+      if (!connectionRequest) {
+        return res.status(400).json({ message: "Request not Found" });
+      }
+
+      connectionRequest.status = status;
+
+      const data = await connectionRequest.save();
+      res.json({ message: "Request " + connectionRequest.status, data });
+    } catch (err) {
+      res.json({ message: `ERROR: ` + err.message });
+    }
+  },
+);
+
 module.exports = requestRouter;
