@@ -3,6 +3,7 @@ const { userAuth } = require("../middleware/auth");
 const User = require("../models/user");
 const ConnectionRequest = require("../models/connectionRequest");
 const requestRouter = express.Router();
+const sendEmail = require("../utilis/sendEmail");
 
 requestRouter.post(
   "/request/send/:status/:userId",
@@ -46,6 +47,14 @@ requestRouter.post(
       await data.save();
 
       if (status == "interested") {
+        const emailRes = await sendEmail.run({
+          toEmailId: toUser.emailId,
+          subject: "New Connection Request",
+          message: `${req.user.firstName} wants to connect with you`,
+        });
+
+        console.log(emailRes);
+
         res.json(
           req.user.firstName + " is " + status + " in " + toUser.firstName,
         );
