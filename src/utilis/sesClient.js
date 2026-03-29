@@ -7,8 +7,8 @@ const REGION = "eu-north-1";
 const sesClient = new SESClient({
   region: REGION,
   credentials: {
-    accessKeyId: "AKIAXYKJU727ODUUIH4F",
-    secretAccessKey: "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",
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
   },
 });
 module.exports = { sesClient };

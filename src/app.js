@@ -10,6 +10,8 @@ const userRouter = require("./routes/user");
 
 const cors = require("cors");
 
+require("dotenv").config();
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -29,8 +31,8 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("connected successfully");
-    app.listen(7777, () => {
-      console.log("listening to port number 7777");
+    app.listen(process.env.PORT, () => {
+      console.log("listening ");
     });
   })
   .catch((err) => {
