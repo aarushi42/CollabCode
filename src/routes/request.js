@@ -47,13 +47,15 @@ requestRouter.post(
       await data.save();
 
       if (status == "interested") {
-        const emailRes = await sendEmail.run({
-          toEmailId: toUser.emailId,
-          subject: "New Connection Request",
-          message: `${req.user.firstName} wants to connect with you`,
-        });
-
-        console.log(emailRes);
+        try {
+          await sendEmail.run({
+            toEmailId: toUser.emailId,
+            subject: "New Connection Request",
+            message: `${req.user.firstName} wants to connect with you`,
+          });
+        } catch (emailErr) {
+          console.error("EMAIL ERROR:", emailErr);
+        }
 
         res.json(
           req.user.firstName + " is " + status + " in " + toUser.firstName,
@@ -73,7 +75,7 @@ requestRouter.post(
   userAuth,
   async (req, res) => {
     //:status should be accepted or rejected
-    //req status should be explicitly intereseted  to accept or rehect
+    //req status should be explicitly intereseted  to accept or reject
     //loggenin user should be the to user
     try {
       const loggedInUser = req.user;
