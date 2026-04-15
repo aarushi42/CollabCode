@@ -53,7 +53,7 @@ const validateEditProfileRequest = (req) => {
     throw new Error("You canot access our services");
   }
 
-  const isGenderAllowed = ["male", "female", "other"].includes(gender);
+  const isGenderAllowed = ["Male", "Female", "Other"].includes(gender);
   if (gender && !isGenderAllowed) {
     throw new Error("Gender Invalid");
   }
