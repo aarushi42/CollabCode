@@ -55,6 +55,13 @@ const userSchema = new mongoose.Schema(
       default: "this is the default about",
       maxLength: 200,
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
+      type: String,
+    },
     photoUrl: {
       type: String,
       default:
