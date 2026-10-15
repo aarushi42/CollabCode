@@ -1,8 +1,5 @@
 require("dotenv").config(); // make sure this is at top
 
-console.log("ACCESS:", process.env.AWS_ACCESS_KEY);
-console.log("SECRET:", process.env.AWS_SECRET_KEY);
-
 const { SESClient } = require("@aws-sdk/client-ses");
 // Set the AWS Region.
 const REGION = "eu-north-1";

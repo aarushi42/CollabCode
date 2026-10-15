@@ -4,7 +4,7 @@ const validateSignUpData = (req) => {
   const { firstName, lastName, emailId, password } = req.body;
 
   if (!firstName || !lastName) {
-    throw new Error("The name is not valid!");
+    throw new Error("Please enter your Full Name");
   }
   if (!emailId) {
     throw new Error("EmailId cannot be empty!");
