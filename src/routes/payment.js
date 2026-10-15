@@ -33,6 +33,8 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
       },
     });
 
+    console.log("Created Razorpay order:", order.id);
+
     //Save it to Db
     console.log(order);
     const payment = new Payment({
@@ -70,8 +72,11 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
     //update my payment status in db
     const paymentDetails = req.body.payload.payment.entity;
+    console.log("Webhook order ID:", paymentDetails.order_id);
+    console.log("Webhook payment ID:", paymentDetails.id);
 
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
+    console.log("Payment found:", Boolean(payment));
 
     payment.status = paymentDetails.status;
     await payment.save();
