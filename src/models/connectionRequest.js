@@ -26,6 +26,16 @@ const connectionRequestSchema = new mongoose.Schema(
   },
 );
 
+connectionRequestSchema.index(
+  { fromUserId: 1, status: 1 },
+  { name: "fromUserId_status" },
+);
+
+connectionRequestSchema.index(
+  { toUserId: 1, status: 1 },
+  { name: "toUserId_status" },
+);
+
 connectionRequestSchema.pre("save", function () {
   const connectionRequest = this;
   if (connectionRequest.fromUserId.equals(connectionRequest.toUserId)) {
