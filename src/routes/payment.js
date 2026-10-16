@@ -15,9 +15,9 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const { firstName, lastName, emailId } = req.user;
     const amount = membershipAmount[membershipType];
 
-    if (!amount) {
+    if (membershipType !== "gold" || !amount) {
       return res.status(400).json({
-        error: "membershipType must be either silver or gold",
+        error: "membershipType must be gold",
       });
     }
 
